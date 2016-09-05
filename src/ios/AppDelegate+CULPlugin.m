@@ -18,8 +18,8 @@ static NSString *const PLUGIN_NAME = @"UniversalLinks";
 
 void UniversalLinkMethodSwizzle(Class c, SEL originalSelector) {
     NSString *selectorString = NSStringFromSelector(originalSelector);
-    SEL newSelector = NSSelectorFromString([@"swizzledUL_" stringByAppendingString:selectorString]);
-    SEL noopSelector = NSSelectorFromString([@"noopUL_" stringByAppendingString:selectorString]);
+    SEL newSelector = NSSelectorFromString([@"swizzledUniversalLinks_" stringByAppendingString:selectorString]);
+    SEL noopSelector = NSSelectorFromString([@"noopUniversalLinks_" stringByAppendingString:selectorString]);
     Method originalMethod, newMethod, noop;
     originalMethod = class_getInstanceMethod(c, originalSelector);
     newMethod = class_getInstanceMethod(c, newSelector);
@@ -37,16 +37,16 @@ void UniversalLinkMethodSwizzle(Class c, SEL originalSelector) {
     UniversalLinkMethodSwizzle([self class], @selector(application:continueUserActivity:restorationHandler:));
 }
 
-- (void)noopUL_application:(UIApplication *)application
+- (void)noopUUniversalLinks_application:(UIApplication *)application
     continueUserActivity:(NSUserActivity *)userActivity
       restorationHandler:(void (^)(NSArray *))restorationHandler {
 }
 
-- (void)swizzledUL_application:(UIApplication *)application
+- (void)swizzledUniversalLinks_application:(UIApplication *)application
         continueUserActivity:(NSUserActivity *)userActivity
           restorationHandler:(void (^)(NSArray *))restorationHandler {
     // Call existing method
-    [self swizzledUL_application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+    [self swizzledUniversalLinks_application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
     
     // ignore activities that are not for Universal Links
     if (![userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb] || userActivity.webpageURL == nil) {
