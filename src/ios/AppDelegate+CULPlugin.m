@@ -16,7 +16,7 @@ static NSString *const PLUGIN_NAME = @"UniversalLinks";
 @implementation AppDelegate (CULPlugin)
 
 
-void MyMethodSwizzle(Class c, SEL originalSelector) {
+void UniversalLinkMethodSwizzle(Class c, SEL originalSelector) {
     NSString *selectorString = NSStringFromSelector(originalSelector);
     SEL newSelector = NSSelectorFromString([@"swizzled_" stringByAppendingString:selectorString]);
     SEL noopSelector = NSSelectorFromString([@"noop_" stringByAppendingString:selectorString]);
@@ -33,8 +33,8 @@ void MyMethodSwizzle(Class c, SEL originalSelector) {
 
 + (void)load
 {
-    NSLog(@"Load FirebasePlugin");
-    MyMethodSwizzle([self class], @selector(application:continueUserActivity:restorationHandler:));
+    NSLog(@"Load UniversalLink Plugin");
+    UniversalLinkMethodSwizzle([self class], @selector(application:continueUserActivity:restorationHandler:));
 }
 
 - (void)noop_application:(UIApplication *)application
